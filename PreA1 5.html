@@ -1,0 +1,495 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Pre-A1 · Prepara la Unidad 5 · ¿Cuándo es?</title>
+<style>
+  :root{
+    --green-dark:#1B6B49; --green:#1B8A5A; --green-mid:#2A9466; --green-bright:#2BA36F; --green-pale:#BDE8CE;
+    --mint:#DCF6E7; --bg:#F0FBF4; --text:#1F2A25; --muted:#5E6F66;
+    --ok:#2BA36F; --bad:#C4622D; --white:#FFFFFF; --card-border:#C8F0D8;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--text);font-family:Calibri,"Segoe UI",Arial,sans-serif;font-size:17px;line-height:1.45}
+  .wrap{max-width:860px;margin:0 auto;padding:0 16px 40px}
+  header{background:var(--green-dark);color:var(--white);padding:28px 16px 24px;text-align:center}
+  .eyebrow{display:inline-block;background:var(--green-bright);color:var(--white);font-size:12px;font-weight:700;letter-spacing:.08em;padding:5px 14px;border-radius:20px;text-transform:uppercase}
+  h1{font-family:Cambria,Georgia,serif;font-size:34px;margin:12px 0 6px}
+  .sub{margin:0;opacity:.92}
+  .progress{max-width:860px;margin:18px auto 0;padding:0 16px}
+  .bar{height:10px;background:var(--green-pale);border-radius:6px;overflow:hidden}
+  .bar span{display:block;height:100%;width:0;background:var(--green-bright);transition:width .4s}
+  .ptext{font-size:14px;color:var(--muted);text-align:right;margin-top:4px}
+  .warn{display:none;gap:10px;align-items:center;border:1px solid var(--bad);color:#7a3418;background:#FBEDE5;border-radius:12px;padding:10px 14px;margin-top:16px;font-size:14px}
+  .ico{width:22px;height:22px;flex-shrink:0;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+  .task{background:var(--white);border:1px solid var(--card-border);border-radius:16px;padding:22px 20px;margin-top:22px;box-shadow:0 2px 6px rgba(27,107,73,.07)}
+  .task h2{font-family:Cambria,Georgia,serif;color:var(--green-dark);font-size:24px;margin:0 0 6px;display:flex;align-items:center;gap:10px}
+  .num{display:inline-flex;align-items:center;justify-content:center;width:34px;height:34px;border-radius:50%;background:var(--green-dark);color:#fff;font-size:17px;font-family:Calibri,Arial,sans-serif;font-weight:700;flex-shrink:0}
+  .tag{display:inline-block;background:var(--mint);color:var(--green-dark);font-size:13px;font-weight:700;padding:3px 12px;border-radius:14px;margin-bottom:10px}
+  .inst{margin:4px 0 2px;font-weight:600;display:flex;align-items:center;gap:8px}
+  .inst .ico{color:var(--green)}
+  .en{margin:0 0 14px;font-size:14px;color:var(--muted);font-style:italic}
+  .play{border:none;background:var(--green);color:#fff;border-radius:24px;padding:8px 16px;font-size:15px;font-weight:700;cursor:pointer;display:inline-flex;align-items:center;gap:6px;white-space:nowrap}
+  .play .ico{width:18px;height:18px}
+  .play:hover{background:var(--green-dark)}
+  .actions{display:flex;gap:10px;align-items:center;margin-top:14px;flex-wrap:wrap}
+  .check{border:none;background:var(--green-dark);color:#fff;border-radius:10px;padding:10px 22px;font-size:16px;font-weight:700;cursor:pointer}
+  .check:hover{background:var(--green)}
+  .score{font-weight:700;color:var(--green-dark)}
+
+  .mark{font-weight:700;font-size:20px;min-width:20px}
+  .ok .mark{color:var(--ok)} .bad .mark{color:var(--bad)}
+
+  /* Tarea 1: ayer, hoy, mañana */
+  .days{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:12px 18px}
+  .drow{display:flex;align-items:center;gap:10px;flex-wrap:wrap;padding:10px 12px;border:1px solid var(--card-border);border-radius:12px}
+  .pill{display:inline-flex;flex-direction:column;align-items:center;border-radius:10px;padding:4px 12px;min-width:96px;line-height:1.15}
+  .pill small{font-size:12px;text-transform:uppercase;letter-spacing:.06em;font-weight:700}
+  .pill b{font-family:Cambria,Georgia,serif;font-size:18px}
+  .pill.hoy{background:var(--green-dark);color:#fff}
+  .pill.hoy small{color:var(--green-pale)}
+  .pill.q{background:var(--mint);color:var(--green-dark)}
+  .arrowx{color:var(--muted);font-size:18px}
+  .dsel{font:inherit;font-family:Cambria,Georgia,serif;font-weight:700;font-size:17px;color:var(--green-dark);border:none;background:transparent;padding:0;cursor:pointer;max-width:120px}
+  .drow.ok{border-color:var(--ok);background:#F3FBF6} .drow.bad{border-color:var(--bad);background:#FDF5F0}
+  .drow .mark{margin-left:auto}
+
+  .gloss{display:flex;flex-wrap:wrap;gap:8px;margin:-4px 0 14px}
+  .gloss span{background:var(--mint);color:var(--green-dark);border-radius:10px;padding:4px 12px;font-size:15px}
+  .gloss b{font-family:Cambria,Georgia,serif}
+  .drow.note{flex-direction:column;align-items:stretch;gap:10px;min-width:0}
+  .ntop{display:flex;align-items:center;gap:12px}
+  .ntext{display:flex;align-items:center;gap:8px;font-size:16px;color:var(--text)}
+  .nicon{width:30px;height:30px;border-radius:8px;display:flex;align-items:center;justify-content:center;color:#fff;flex-shrink:0}
+  .nicon .ico{width:18px;height:18px}
+  .nline{display:flex;align-items:center;gap:8px}
+  .nask{font-weight:600;color:var(--green-dark);white-space:nowrap}
+  .din{flex:1;min-width:0;font-size:18px;font-family:Cambria,Georgia,serif;font-weight:700;color:var(--green-dark);border:2px solid var(--green-pale);border-radius:10px;padding:5px 10px}
+  .din:focus{outline:none;border-color:var(--green-mid)}
+  .drow.ok .din{border-color:var(--ok);background:#E3F6EB}
+  .drow.bad .din{border-color:var(--bad);background:#FBEDE5}
+  .fix{font-size:14px;color:var(--bad)}
+  /* Tarea 2: calendario */
+  .cal-wrap{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.25fr);gap:18px;align-items:start}
+  .events{display:flex;flex-direction:column;gap:10px}
+  .ev{display:flex;align-items:center;gap:10px;border:2px solid var(--card-border);border-radius:12px;padding:8px 10px;cursor:pointer;background:#fff}
+  .ev.sel{border-color:var(--green-dark);background:var(--mint)}
+  .ev .evi{width:38px;height:38px;border-radius:10px;display:flex;align-items:center;justify-content:center;color:#fff;flex-shrink:0}
+  .ev .evi .ico{width:22px;height:22px}
+  .ev .evt{font-weight:700;color:var(--green-dark);flex:1}
+  .ev .evd{font-size:14px;color:var(--muted)}
+  .ev.ok{border-color:var(--ok)} .ev.bad{border-color:var(--bad)}
+  .cal{border:1px solid var(--card-border);border-radius:14px;overflow:hidden}
+  .calh{background:var(--green-dark);color:#fff;text-align:center;font-family:Cambria,Georgia,serif;font-weight:700;font-size:20px;padding:8px}
+  .calg{display:grid;grid-template-columns:repeat(7,1fr)}
+  .calg .wd{font-size:12px;font-weight:700;text-align:center;color:var(--muted);padding:6px 0;background:var(--bg);text-transform:lowercase}
+  .day{position:relative;border:none;border-top:1px solid var(--card-border);border-left:1px solid var(--card-border);background:#fff;height:46px;font-size:15px;color:var(--text);cursor:pointer;padding:3px 5px;text-align:left;vertical-align:top}
+  .day:nth-child(7n+1){border-left:none}
+  .day.we{background:#F7FCF9}
+  .day.ready:hover{background:var(--mint)}
+  .day .dm{position:absolute;right:4px;bottom:4px;width:22px;height:22px;border-radius:50%;color:#fff;display:flex;align-items:center;justify-content:center}
+  .day .dm .ico{width:14px;height:14px}
+  .day.empty{cursor:default;background:var(--bg)}
+
+  /* Tarea 3: crucigrama */
+  .cw-wrap{display:flex;gap:24px;flex-wrap:wrap;align-items:flex-start}
+  .cw{display:grid;gap:3px}
+  .cw .c{width:38px;height:38px}
+  .cw input{width:38px;height:38px;border:2px solid var(--green-mid);border-radius:6px;text-align:center;font-family:Cambria,Georgia,serif;font-size:19px;font-weight:700;color:var(--green-dark);text-transform:uppercase;padding:0;background:#fff}
+  .cw input:focus{outline:none;background:var(--mint);border-color:var(--green-dark)}
+  .cw .cellwrap{position:relative}
+  .cw .n{position:absolute;left:3px;top:1px;font-size:10px;font-weight:700;color:var(--muted);pointer-events:none}
+  .cw input.ok{border-color:var(--ok);background:#E3F6EB}
+  .cw input.bad{border-color:var(--bad);background:#FBEDE5}
+  .clues{flex:1;min-width:220px}
+  .clues h3{font-size:14px;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin:0 0 6px}
+  .clue{display:flex;gap:8px;align-items:center;padding:5px 0;font-size:16px}
+  .clue b{display:inline-flex;width:24px;height:24px;border-radius:50%;background:var(--green-dark);color:#fff;font-size:13px;align-items:center;justify-content:center;flex-shrink:0}
+  .clue .badge-month{font-family:Cambria,Georgia,serif;font-weight:700;color:var(--green-dark)}
+  .clue.ok{color:var(--ok)} .clue.bad{color:var(--bad)}
+
+  /* Tarea 4: busca el error */
+  .lbox{border:1px solid var(--card-border);border-radius:14px;padding:12px 14px;margin-top:12px}
+  .lhead{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:8px}
+  .avatar{width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;flex-shrink:0}
+  .avatar .ico{width:24px;height:24px}
+  .lq{font-weight:700;color:var(--green-dark)}
+  .msg{background:var(--bg);border-radius:12px;padding:10px 14px;font-size:18px;line-height:1.9}
+  .w{border:none;background:transparent;font:inherit;color:var(--text);padding:1px 1px;margin:0 -1px;border-radius:6px;cursor:pointer}
+  .w:hover{background:var(--mint)}
+  .w.sel{background:var(--green-dark);color:#fff}
+  .lbox.ok .w.sel{background:var(--ok)}
+  .lbox.bad .w.sel{background:var(--bad)}
+  .lbox.ok{border-color:var(--ok)} .lbox.bad{border-color:var(--bad)}
+  .lbox .mark{margin-left:auto}
+  .final{background:var(--green-dark);color:#fff;border-radius:16px;padding:22px;margin-top:26px;text-align:center}
+  .final .big{font-family:Cambria,Georgia,serif;font-size:30px;margin:6px 0}
+  .final button{background:#fff;color:var(--green-dark);border:none;border-radius:10px;padding:9px 20px;font-weight:700;font-size:15px;cursor:pointer;margin-top:8px}
+  footer{text-align:center;color:var(--muted);margin-top:26px;font-family:Cambria,Georgia,serif;font-size:18px}
+  @media (max-width:640px){h1{font-size:27px}.days,.cal-wrap{grid-template-columns:1fr}.cw{grid-template-columns:repeat(9,30px)!important}.cw .c,.cw input{width:30px;height:30px;font-size:16px}}
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <symbol id="i-headphones" viewBox="0 0 24 24"><path d="M4 15v-3a8 8 0 0 1 16 0v3M4 15h3v5H5a1 1 0 0 1-1-1v-4zM20 15h-3v5h2a1 1 0 0 0 1-1v-4z"/></symbol>
+    <symbol id="i-speaker" viewBox="0 0 24 24"><path d="M4 9h4l5-4v14l-5-4H4zM16.5 8.5a5 5 0 0 1 0 7M19 6a8.5 8.5 0 0 1 0 12"/></symbol>
+    <symbol id="i-pause" viewBox="0 0 24 24"><path d="M8 5v14M16 5v14"/></symbol>
+    <symbol id="i-play" viewBox="0 0 24 24"><path d="M7 4l13 8-13 8z"/></symbol>
+    <symbol id="i-person" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></symbol>
+    <symbol id="i-cal" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/></symbol>
+    <symbol id="i-week" viewBox="0 0 24 24"><path d="M3 12h4M10 12h4M17 12h4M7 9l3 3-3 3M14 9l3 3-3 3"/></symbol>
+    <symbol id="i-grid" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M9 3v18M15 3v18M3 9h18M3 15h18"/></symbol>
+    <symbol id="i-search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="6"/><path d="M20 20l-4.5-4.5"/></symbol>
+    <symbol id="i-info" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 11v6M12 7.5v.5"/></symbol>
+    <!-- eventos -->
+    <symbol id="e-cena" viewBox="0 0 24 24"><path d="M7 3v8M5 3v4a2 2 0 0 0 4 0V3M7 11v10M16 3c-2 1.5-2.5 5-2.5 7h2.5v11"/></symbol>
+    <symbol id="e-tarta" viewBox="0 0 24 24"><path d="M4 21h16v-8H4zM4 16c2 1.5 4 1.5 6 0s4-1.5 6 0 4 1.5 4 0M12 13V9M12 6.5c-.8-.8-.8-2 0-3 .8 1 .8 2.2 0 3"/></symbol>
+    <symbol id="e-clase" viewBox="0 0 24 24"><path d="M5 5.5A2.5 2.5 0 0 1 7.5 3H19v15H7.5A2.5 2.5 0 0 0 5 20.5zM5 20.5A2.5 2.5 0 0 0 7.5 23H19v-5M9 7.5h6"/></symbol>
+    <symbol id="e-gym" viewBox="0 0 24 24"><path d="M3 10v4M6 8v8M18 8v8M21 10v4M6 12h12"/></symbol>
+    <symbol id="e-fiesta" viewBox="0 0 24 24"><path d="M4 20l5-14 9 9zM9 6l9 9M14 4l1-1M19 9l1-1M17 3.5v2M20.5 7h-2"/></symbol>
+  </defs>
+</svg>
+
+<header>
+  <span class="eyebrow">Pre-A1 · Español · Prepara la Unidad 5</span>
+  <h1>¿Cuándo es?</h1>
+  <p class="sub">Los días, los meses y las fechas.</p>
+</header>
+<div class="progress"><div class="bar"><span id="bar"></span></div><div class="ptext" id="ptext">0 / 19</div></div>
+
+<div class="wrap">
+  <div class="warn" id="warn"><svg class="ico"><use href="#i-info"/></svg><span>Tu navegador no tiene voz en español. Abre esta página en Microsoft Edge o Google Chrome para escuchar el audio.</span></div>
+
+  <!-- TAREA 1 -->
+  <section class="task">
+    <h2><span class="num">1</span>Ayer, hoy y mañana</h2>
+    <span class="tag">Vocabulario: los días de la semana</span>
+    <p class="inst"><svg class="ico"><use href="#i-week"/></svg>Mira qué día es hoy, lee la nota y escribe el día de la semana.</p>
+    <p class="en">Look at today's day, read the note and write the missing day of the week.<br>Example: <b>hoy</b> is <b>lunes</b> and the class is <b>mañana</b> → you write <b>martes</b>.</p>
+    <div class="gloss"><span><b>ayer</b> = yesterday</span><span><b>hoy</b> = today</span><span><b>mañana</b> = tomorrow</span></div>
+    <div class="days" id="days"></div>
+    <div class="actions"><button class="check" data-task="1">Comprobar</button><span class="score" id="s1"></span></div>
+  </section>
+
+  <!-- TAREA 2 -->
+  <section class="task">
+    <h2><span class="num">2</span>La agenda de marzo</h2>
+    <span class="tag">Escuchar: las fechas</span>
+    <p class="inst"><svg class="ico"><use href="#i-cal"/></svg>Escucha cada plan y toca el día en el calendario.</p>
+    <p class="en">Tap a plan, listen, then tap the right day in the calendar.</p>
+    <div class="cal-wrap">
+      <div class="events" id="events"></div>
+      <div class="cal"><div class="calh">marzo</div><div class="calg" id="calg"></div></div>
+    </div>
+    <div class="actions"><button class="check" data-task="2">Comprobar</button><span class="score" id="s2"></span></div>
+  </section>
+
+  <!-- TAREA 3 -->
+  <section class="task">
+    <h2><span class="num">3</span>Crucigrama de los meses</h2>
+    <span class="tag">Vocabulario: los meses del año</span>
+    <p class="inst"><svg class="ico"><use href="#i-grid"/></svg>Lee el número del mes y escribe su nombre en el crucigrama.</p>
+    <p class="en">Read the number of each month (1 = January) and write the month in the crossword.</p>
+    <div class="cw-wrap">
+      <div class="cw" id="cw"></div>
+      <div class="clues" id="clues"></div>
+    </div>
+    <div class="actions"><button class="check" data-task="3">Comprobar</button><span class="score" id="s3"></span></div>
+  </section>
+
+  <!-- TAREA 4 -->
+  <section class="task">
+    <h2><span class="num">4</span>Busca el error</h2>
+    <span class="tag">Escuchar: la edad y el cumpleaños</span>
+    <p class="inst"><svg class="ico"><use href="#i-search"/></svg>Escucha y lee. Una palabra es diferente: tócala.</p>
+    <p class="en">Listen and read. One word in the text is different from the audio: tap it.</p>
+    <div id="t4"></div>
+    <div class="actions"><button class="check" data-task="4">Comprobar</button><span class="score" id="s4"></span></div>
+  </section>
+
+  <div class="final">
+    <div>Tu puntuación total</div>
+    <div class="big" id="total">0 / 19</div>
+    <div id="msg">Haz las cuatro tareas y pulsa «Comprobar».</div>
+    <button id="reset">Empezar otra vez</button>
+  </div>
+
+  <footer>¡Nos vemos en clase! — Fernanda.</footer>
+</div>
+
+<script>
+(function(){
+  const icon = (id) => '<svg class="ico"><use href="#'+id+'"/></svg>';
+  const el = (tag, cls, txt) => { const e=document.createElement(tag); if(cls) e.className=cls; if(txt!=null) e.textContent=txt; return e; };
+  function shuffle(a){ a = a.slice(); for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];} return a; }
+  const norm = (s) => s.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'').replace(/[^a-z0-9ñ]/g,'');
+
+  /* ---------- VOZ (automática: mujer / hombre) ---------- */
+  const synth = window.speechSynthesis;
+  let vF = null, vM = null, fakeMale = false;
+  const FEMALE = /\b(elvira|luc[ií]a|helena|laura|m[oó]nica|paulina|marisol|abril|esperanza|ximena|triana|irene|estrella|dalia|elena|sof[ií]a|camila|catalina|salom[eé]|valentina|beatriz|candela|carlota|nuria|larissa|lola|marta|mar[ií]a|renata|yolanda|karina|andrea|tania|nora|carla|google español|female|mujer)\b/i;
+  const MALE = /\b([aá]lvaro|jorge|pablo|diego|ra[uú]l|enrique|arnau|dar[ií]o|tom[aá]s|juan|carlos|gonzalo|manuel|alonso|andr[eé]s|gerardo|lorenzo|cristian|federico|emilio|sa[uú]l|el[ií]as|alex|mateo|pedro|rodrigo|roberto|javier|luis|marcelo|mario|sergio|v[ií]ctor|yago|rafael|jos[eé]|nil|teo|luciano|alberto|francisco|miguel|antonio|male|hombre)\b/i;
+  function quality(v){
+    let q = 0;
+    if(/natural|neural|online/i.test(v.name)) q += 100;
+    if(/premium|enhanced|mejorada/i.test(v.name)) q += 80;
+    if(/google/i.test(v.name)) q += 60;
+    if(/^es[-_]ES/i.test(v.lang)) q += 30;
+    if(!v.localService) q += 5;
+    return q;
+  }
+  function loadVoices(){
+    if(!synth) return;
+    const all = synth.getVoices();
+    const es = all.filter(v => /^es/i.test(v.lang)).sort((a,b)=>quality(b)-quality(a));
+    const mal = es.filter(v => MALE.test(v.name) && !/female/i.test(v.name));
+    let fem = es.filter(v => FEMALE.test(v.name) && !mal.includes(v));
+    if(!fem.length) fem = es.filter(v => !mal.includes(v));
+    vF = fem[0] || es[0] || null;
+    vM = mal[0] || vF;
+    fakeMale = !mal.length;
+    document.getElementById('warn').style.display = (all.length && !es.length) ? 'flex' : 'none';
+  }
+  if(!synth){ document.getElementById('warn').style.display='flex'; }
+  else { loadVoices(); synth.onvoiceschanged = loadVoices; }
+
+  let curBtn = null, token = 0, st = null;
+  function setBtn(b, state){
+    if(!b) return;
+    b.dataset.state = state;
+    b.innerHTML = (state==='playing' ? icon('i-pause')+'Pausa' : state==='paused' ? icon('i-play')+'Seguir' : icon('i-speaker')+b.dataset.label);
+  }
+  function finish(my){ if(my !== token) return; setBtn(curBtn,'idle'); curBtn = null; st = null; }
+  function next(my){
+    if(!st || my !== token) return;
+    if(st.idx >= st.lines.length){ finish(my); return; }
+    const l = st.lines[st.idx];
+    const u = new SpeechSynthesisUtterance(l.t);
+    u.rate = l.r || 0.92; u.pitch = 1;
+    const v = l.v === 'M' ? vM : vF;
+    if(v){ u.voice = v; u.lang = v.lang; } else { u.lang = 'es-ES'; }
+    if(l.v === 'M' && fakeMale) u.pitch = 0.8;
+    u.onend = () => {
+      if(!st || my !== token) return;
+      st.idx++;
+      if(st.paused) return;
+      st.timer = setTimeout(()=>next(my), st.lines.length > 1 ? 350 : 0);
+    };
+    synth.speak(u);
+  }
+  function say(lines, btn){
+    if(!synth) return;
+    if(btn && btn === curBtn && st){
+      if(btn.dataset.state === 'playing'){ st.paused = true; clearTimeout(st.timer); if(synth.speaking) synth.pause(); setBtn(btn,'paused'); return; }
+      if(btn.dataset.state === 'paused'){ st.paused = false; setBtn(btn,'playing'); if(synth.paused) synth.resume(); else next(token); return; }
+    }
+    synth.cancel(); if(st) clearTimeout(st.timer);
+    setBtn(curBtn,'idle');
+    const my = ++token; curBtn = btn || null; setBtn(curBtn,'playing');
+    st = {lines, idx:0, paused:false, timer:null};
+    next(my);
+  }
+  const playBtn = (label) => { const b = el('button','play'); b.dataset.label = label; setBtn(b,'idle'); return b; };
+
+
+  /* ---------- PUNTUACIÓN ---------- */
+  const scores = {1:0,2:0,3:0,4:0};
+  const TOTAL = 19;
+  function updateTotal(){
+    const s = scores[1]+scores[2]+scores[3]+scores[4];
+    document.getElementById('total').textContent = s+' / '+TOTAL;
+    document.getElementById('ptext').textContent = s+' / '+TOTAL;
+    document.getElementById('bar').style.width = (s/TOTAL*100)+'%';
+    document.getElementById('msg').textContent =
+      s===TOTAL ? '¡Perfecto! Ya estás preparado/a para la Unidad 5.' :
+      s>=14 ? '¡Muy bien! Repasa los errores y vuelve a comprobar.' :
+      s>0 ? '¡Buen comienzo! Repite las tareas y vuelve a comprobar.' : 'Haz las cuatro tareas y pulsa «Comprobar».';
+  }
+
+  /* ---------- TAREA 1: notas con ayer, hoy, mañana (escribir el día) ---------- */
+  const WEEK = ['lunes','martes','miércoles','jueves','viernes','sábado','domingo'];
+  const T1 = [
+    {hoy:'lunes', rel:'mañana', ev:'clase', c:'#1B6B49', note:'La clase de español es mañana.', ask:'La clase es el'},
+    {hoy:'viernes', rel:'mañana', ev:'cena', c:'#C4622D', note:'La cena con amigos es mañana.', ask:'La cena es el'},
+    {hoy:'jueves', rel:'ayer', ev:null, note:'¿Y ayer?', ask:'Ayer:'},
+    {hoy:'domingo', rel:'mañana', ev:'gym', c:'#3A6B8C', note:'Mañana tengo gimnasio.', ask:'El gimnasio es el'},
+    {hoy:'sábado', rel:'ayer', ev:null, note:'¿Y ayer?', ask:'Ayer:'},
+    {hoy:'martes', rel:'mañana', ev:'fiesta', c:'#8C5A9E', note:'¡La fiesta es mañana!', ask:'La fiesta es el'}
+  ];
+  const days = document.getElementById('days');
+  T1.forEach(it=>{
+    const i = WEEK.indexOf(it.hoy);
+    const ans = it.rel==='mañana' ? WEEK[(i+1)%7] : WEEK[(i+6)%7];
+    const r = el('div','drow note'); r.dataset.ans = ans;
+    const top = el('div','ntop');
+    const hoy = el('span','pill hoy'); hoy.innerHTML = '<small>hoy</small><b>'+it.hoy+'</b>'; top.appendChild(hoy);
+    const tx = el('div','ntext');
+    if(it.ev){ const ic = el('span','nicon'); ic.style.background = it.c; ic.innerHTML = icon('e-'+it.ev); tx.appendChild(ic); }
+    tx.appendChild(el('span',null,it.note)); top.appendChild(tx);
+    r.appendChild(top);
+    const line = el('div','nline');
+    line.appendChild(el('span','nask',it.ask));
+    const inp = el('input','din'); inp.type='text'; inp.autocomplete='off'; inp.spellcheck=false; inp.setAttribute('aria-label',it.ask);
+    inp.addEventListener('input',()=>{ r.classList.remove('ok','bad'); r.querySelector('.mark').textContent=''; r.querySelector('.fix').textContent=''; });
+    line.appendChild(inp); line.appendChild(el('span','mark')); line.appendChild(el('span','fix'));
+    r.appendChild(line);
+    days.appendChild(r);
+  });
+
+  /* ---------- TAREA 2: calendario de marzo (empieza en lunes) ---------- */
+  const EV = [
+    {id:'cena', t:'La cena', c:'#C4622D', day:12, v:'M', audio:'La cena con mis amigos es el viernes, doce de marzo.'},
+    {id:'tarta', t:'El cumpleaños de Lucía', c:'#2BA36F', day:25, v:'F', audio:'Mi cumpleaños es el veinticinco de marzo.'},
+    {id:'clase', t:'La clase de español', c:'#1B6B49', day:2, v:'M', audio:'La clase de español es el martes, dos de marzo.'},
+    {id:'fiesta', t:'La fiesta', c:'#8C5A9E', day:20, v:'F', audio:'¡La fiesta es el sábado, veinte de marzo!'}
+  ];
+  const events = document.getElementById('events'), calg = document.getElementById('calg');
+  let selEv = null; const placed = {}; const dayEls = {};
+  ['lun','mar','mié','jue','vie','sáb','dom'].forEach(w=>calg.appendChild(el('div','wd',w)));
+  for(let d=1; d<=31; d++){
+    const b = el('button','day'+(((d-1)%7)>=5?' we':''), String(d)); b.dataset.d = d; dayEls[d]=b;
+    b.addEventListener('click',()=>{
+      if(!selEv) return;
+      const k = selEv.dataset.id;
+      if(placed[k]) clearMark(placed[k], k);
+      Object.keys(placed).forEach(o=>{ if(placed[o]===d){ clearMark(d,o); delete placed[o]; } });
+      placed[k] = d;
+      const ev = EV.find(e=>e.id===k);
+      const m = el('span','dm'); m.dataset.k = k; m.style.background = ev.c; m.innerHTML = icon('e-'+k); b.appendChild(m);
+      selEv.classList.remove('sel'); selEv.querySelector('.evd').textContent = d+' de marzo';
+      selEv = null; readyCal(false); clear2();
+    });
+    calg.appendChild(b);
+  }
+  for(let i=0;i<4;i++){ const e = el('div','day empty'); calg.appendChild(e); } // completa la última fila
+  function clearMark(d,k){ const m = dayEls[d] && dayEls[d].querySelector('.dm[data-k="'+k+'"]'); if(m) m.remove(); const evEl = events.querySelector('.ev[data-id="'+k+'"] .evd'); if(evEl) evEl.textContent='Toca el día'; }
+  function readyCal(on){ Object.values(dayEls).forEach(x=>x.classList.toggle('ready',on)); }
+  function clear2(){ events.querySelectorAll('.ev').forEach(e=>e.classList.remove('ok','bad')); document.getElementById('s2').textContent=''; }
+  EV.forEach(ev=>{
+    const e = el('div','ev'); e.dataset.id = ev.id;
+    const ic = el('span','evi'); ic.style.background = ev.c; ic.innerHTML = icon('e-'+ev.id); e.appendChild(ic);
+    const tx = el('div'); tx.style.flex='1'; tx.appendChild(el('div','evt',ev.t)); tx.appendChild(el('div','evd','Toca el día')); e.appendChild(tx);
+    const b = playBtn('Escucha'); b.addEventListener('click',(x)=>{ x.stopPropagation(); say([{t:ev.audio, v:ev.v, r:0.85}], b); });
+    e.appendChild(b);
+    e.addEventListener('click',()=>{ events.querySelectorAll('.ev').forEach(x=>x.classList.remove('sel')); selEv = e; e.classList.add('sel'); readyCal(true); });
+    events.appendChild(e);
+  });
+
+  /* ---------- TAREA 3: crucigrama ---------- */
+  const WORDS = [
+    {n:1, w:'MARZO', r:0, c:0, dir:'a', clue:3},
+    {n:1, w:'MAYO', r:0, c:0, dir:'d', clue:5},
+    {n:2, w:'OCTUBRE', r:0, c:4, dir:'d', clue:10},
+    {n:3, w:'JUNIO', r:3, c:3, dir:'a', clue:6},
+    {n:4, w:'ENERO', r:6, c:4, dir:'a', clue:1}
+  ];
+  const ROWS = 7, COLS = 9;
+  const grid = {}; // "r,c" -> letra
+  WORDS.forEach(W=>{ for(let i=0;i<W.w.length;i++){ const r=W.r+(W.dir==='d'?i:0), c=W.c+(W.dir==='a'?i:0); grid[r+','+c]=W.w[i]; } });
+  const cw = document.getElementById('cw'); cw.style.gridTemplateColumns = 'repeat('+COLS+', 38px)';
+  const inputs = {};
+  for(let r=0;r<ROWS;r++) for(let c=0;c<COLS;c++){
+    const key = r+','+c;
+    if(!grid[key]){ cw.appendChild(el('div','c')); continue; }
+    const w = el('div','cellwrap c');
+    const start = WORDS.find(W=>W.r===r && W.c===c);
+    if(start) w.appendChild(el('span','n',start.n));
+    const inp = el('input'); inp.maxLength = 1; inp.autocomplete='off'; inp.dataset.key = key;
+    inp.addEventListener('input',()=>{
+      inp.value = inp.value.slice(-1).toUpperCase(); clear3();
+      if(inp.value){ // avanza en la dirección de la palabra activa
+        const [rr,cc] = key.split(',').map(Number);
+        const nx = curDir==='d' ? inputs[(rr+1)+','+cc] : inputs[rr+','+(cc+1)];
+        const alt = curDir==='d' ? inputs[rr+','+(cc+1)] : inputs[(rr+1)+','+cc];
+        (nx || alt) && (nx || alt).focus();
+      }
+    });
+    inp.addEventListener('focus',()=>{
+      const [rr,cc] = key.split(',').map(Number);
+      const across = inputs[rr+','+(cc-1)] || inputs[rr+','+(cc+1)] || grid[rr+','+(cc+1)];
+      const down = inputs[(rr-1)+','+cc] || grid[(rr+1)+','+cc];
+      if(curDir==='a' && !across && down) curDir='d';
+      else if(curDir==='d' && !down && across) curDir='a';
+    });
+    inputs[key] = inp; w.appendChild(inp); cw.appendChild(w);
+  }
+  let curDir = 'a';
+  const clues = document.getElementById('clues');
+  const ch = el('h3',null,'Horizontales →'); clues.appendChild(ch);
+  WORDS.filter(W=>W.dir==='a').forEach(W=>{ const d = el('div','clue'); d.dataset.w = W.w; d.innerHTML = '<b>'+W.n+'</b><span>el mes <span class="badge-month">'+W.clue+'</span></span>'; clues.appendChild(d); });
+  const cv = el('h3',null,'Verticales ↓'); cv.style.marginTop='12px'; clues.appendChild(cv);
+  WORDS.filter(W=>W.dir==='d').forEach(W=>{ const d = el('div','clue'); d.dataset.w = W.w; d.innerHTML = '<b>'+W.n+'</b><span>el mes <span class="badge-month">'+W.clue+'</span></span>'; clues.appendChild(d); });
+  function clear3(){ Object.values(inputs).forEach(i=>i.classList.remove('ok','bad')); clues.querySelectorAll('.clue').forEach(c=>c.classList.remove('ok','bad')); document.getElementById('s3').textContent=''; }
+
+  /* ---------- TAREA 4: busca el error ---------- */
+  const T4 = [
+    {name:'Raquel', v:'F', c:'#2BA36F', audio:'Hola, soy Raquel. Tengo veintiocho años. Mi cumpleaños es el tres de abril.', text:'Hola, soy Raquel. Tengo veintiocho años. Mi cumpleaños es el 3 de agosto.', wrong:'agosto'},
+    {name:'Óscar', v:'M', c:'#1B6B49', audio:'Me llamo Óscar. Tengo cuarenta años. Mi cumpleaños es el quince de octubre.', text:'Me llamo Óscar. Tengo catorce años. Mi cumpleaños es el 15 de octubre.', wrong:'catorce'},
+    {name:'Nerea', v:'F', c:'#1B8A5A', audio:'Hola, soy Nerea. Hoy es martes, nueve de mayo. ¡Hoy es mi cumpleaños!', text:'Hola, soy Nerea. Hoy es jueves, 9 de mayo. ¡Hoy es mi cumpleaños!', wrong:'jueves'},
+    {name:'Iván', v:'M', c:'#5E6F66', audio:'Soy Iván. Tengo veintidós años. Mi cumpleaños es el treinta de enero.', text:'Soy Iván. Tengo veintidós años. Mi cumpleaños es el 13 de enero.', wrong:'13'}
+  ];
+  const t4 = document.getElementById('t4');
+  T4.forEach(it=>{
+    const box = el('div','lbox'); box.dataset.wrong = norm(it.wrong);
+    const h = el('div','lhead');
+    const av = el('span','avatar'); av.style.background = it.c; av.innerHTML = icon('i-person'); h.appendChild(av);
+    h.appendChild(el('span','lq',it.name));
+    const b = playBtn('Escucha'); b.addEventListener('click',()=>say([{t:it.audio, v:it.v, r:0.85}], b)); h.appendChild(b);
+    h.appendChild(el('span','mark'));
+    box.appendChild(h);
+    const m = el('div','msg');
+    it.text.split(/(\s+)/).forEach(tok=>{
+      if(/^\s+$/.test(tok)){ m.appendChild(document.createTextNode(' ')); return; }
+      const mt = tok.match(/^([¡¿]?)(.+?)([.,!?:]*)$/);
+      if(mt[1]) m.appendChild(document.createTextNode(mt[1]));
+      const w = el('button','w',mt[2]);
+      w.addEventListener('click',()=>{ m.querySelectorAll('.w').forEach(x=>x.classList.remove('sel')); w.classList.add('sel'); box.classList.remove('ok','bad'); box.querySelector('.mark').textContent=''; });
+      m.appendChild(w);
+      if(mt[3]) m.appendChild(document.createTextNode(mt[3]));
+    });
+    box.appendChild(m); t4.appendChild(box);
+  });
+
+  /* ---------- COMPROBAR ---------- */
+  document.querySelectorAll('.check').forEach(btn=>{
+    btn.addEventListener('click',()=>{
+      const t = btn.dataset.task; let n=0, max=0;
+      if(t==='1'){
+        max = T1.length;
+        days.querySelectorAll('.drow').forEach(r=>{
+          const inp = r.querySelector('.din'); const ok = norm(inp.value) === norm(r.dataset.ans);
+          r.classList.remove('ok','bad'); r.classList.add(ok?'ok':'bad'); r.querySelector('.mark').textContent = ok?'✓':'✗';
+          if(ok){ inp.value = r.dataset.ans; } else if(inp.value.trim()) { r.querySelector('.fix').textContent = ''; }
+          if(ok) n++;
+        });
+      }
+      if(t==='2'){
+        max = EV.length;
+        EV.forEach(ev=>{ const e = events.querySelector('.ev[data-id="'+ev.id+'"]'); const ok = placed[ev.id] === ev.day; e.classList.remove('ok','bad','sel'); e.classList.add(ok?'ok':'bad'); if(ok) n++; });
+      }
+      if(t==='3'){
+        max = WORDS.length; clear3();
+        WORDS.forEach(W=>{
+          let ok = true; const cells = [];
+          for(let i=0;i<W.w.length;i++){ const r=W.r+(W.dir==='d'?i:0), c=W.c+(W.dir==='a'?i:0); const inp = inputs[r+','+c]; cells.push(inp); if(inp.value !== W.w[i]) ok = false; }
+          cells.forEach(inp=>{ if(inp.value === grid[inp.dataset.key]) inp.classList.add('ok'); else inp.classList.add('bad'); });
+          clues.querySelector('.clue[data-w="'+W.w+'"]').classList.add(ok?'ok':'bad');
+          if(ok) n++;
+        });
+      }
+      if(t==='4'){
+        max = T4.length;
+        t4.querySelectorAll('.lbox').forEach(bx=>{ const s = bx.querySelector('.w.sel'); const ok = s && norm(s.textContent) === bx.dataset.wrong; bx.classList.remove('ok','bad'); bx.classList.add(ok?'ok':'bad'); bx.querySelector('.mark').textContent = ok?'✓':'✗'; if(ok) n++; });
+      }
+      scores[t]=n;
+      document.getElementById('s'+t).textContent = n+' / '+max;
+      updateTotal();
+    });
+  });
+  document.getElementById('reset').addEventListener('click',()=>location.reload());
+})();
+</script>
+</body>
+</html>
